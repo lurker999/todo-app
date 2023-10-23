@@ -1,0 +1,52 @@
+  <div style="margin-bottom: 5px;">
+    <div class="col-sm inline">
+      <form (ngSubmit)="filterTasks()" #searchForm="ngForm" name="form">
+        <div class="col-sm inline" >
+          <input class="form-control " type="text" name="searchTerm" required [(ngModel)]="searchTerm" #name="ngModel" placeholder="Filter">
+        </div>
+        <div class="col-sm inline" style="margin-left: 5px;">
+          <button type="submit" class="btn btn-default" [disabled]="searchForm.invalid">Search</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm" style="float: right;">
+      <button class="btn btn-default" routerLink="add">New task</button>
+    </div>    
+  </div>
+  
+  <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort matSortActive="createdAt" matSortDirection="asc">  
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Title </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.title}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Created At </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.createdAt | date:'yyyy-MM-dd hh:mm'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="updatedAt">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Updated At </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.updatedAt | date:'yyyy-MM-dd hh:mm'}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let row" > 
+          <button type="button" class="btn btn-default" routerLink="/update/{{row.id}}">Update </button>
+          &nbsp;
+          <button type="button" class="btn btn-default" (click)="delete(row.id)">Delete </button>
+          &nbsp;
+          <button type="button" class="btn btn-default" routerLink="/details/{{row.id}}">Details </button>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+  
+    <mat-paginator [pageSizeOptions]="pageOptions" [length]="totalRows" [pageIndex]="currentPage" [pageSize]="pageSize" (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
